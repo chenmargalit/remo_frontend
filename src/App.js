@@ -7,6 +7,7 @@ import NorthRoundedIcon from "@mui/icons-material/NorthRounded";
 import CircularProgress from "@mui/material/CircularProgress";
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { queryServer } from "./utils/httpHandler";
+import {inputLengthValidation} from "./utils/validations";
 
 export default function App() {
     const [query, setQuery] = useState("");
@@ -20,10 +21,13 @@ export default function App() {
 
     const handleSend = async (query) => {
 
-        if (query.length < 1 || query.length > 2000) {
-            setError("ההודעה חייבת להכיל בין 1 ל-2000 תווים.");
-            return;
+        const inpValidation = inputLengthValidation(query)
+        const {error, msg} = inpValidation
+        if (error) {
+            setError(msg);
+            return
         }
+
         setError("");
 
         if (!hasStarted) setHasStarted(true);
