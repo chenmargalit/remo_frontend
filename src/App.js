@@ -6,7 +6,7 @@ import IconButton from "@mui/material/IconButton";
 import NorthRoundedIcon from "@mui/icons-material/NorthRounded";
 import CircularProgress from "@mui/material/CircularProgress";
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import { serverEndpoint } from './constant';
+import { queryServer } from "./utils/httpHandler";
 
 export default function App() {
     const [query, setQuery] = useState("");
@@ -29,45 +29,13 @@ export default function App() {
         if (!hasStarted) setHasStarted(true);
 
         setLoading(true);
-        const result = await queryServer(query);
-        console.log('result is', result)
+        const result = await queryServer(query, setServerCrashed, setError);
         if (result !== null) {
             setMessages((prev) => [...prev, { prompt: query, response: result }]);
             setQuery("");
             setLoading(false);
         }
-
     };
-
-    async function queryServer(inputText) {
-        try {
-            const res = await fetch(`${serverEndpoint}/query`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({ query: inputText }),
-            });
-
-            if (!res.ok) {
-                setServerCrashed(true);
-                setError(`שגיאה מהשרת: ${res.status}`);
-                return null;
-            }
-
-            const data = await res.json()
-            clean_errors()
-            return data;
-        } catch (err) {
-            console.error("Failed to query server:", err);
-            return null;
-        }
-    }
-
-const clean_errors = () => {
-        setServerCrashed(false)
-        setError('')
-    }
 
     return (
         <div className="chat-wrapper">
