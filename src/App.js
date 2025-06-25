@@ -8,6 +8,7 @@ import CircularProgress from "@mui/material/CircularProgress";
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { queryServer } from "./utils/httpHandler";
 import {inputLengthValidation} from "./utils/validations";
+import {WELCOME_MSG, WELCOME_SUB_MSG, SERVER_UNAVAILABLE_ERR, INPUT_PLACEHOLDER} from "./constant";
 
 export default function App() {
     const [query, setQuery] = useState("");
@@ -49,8 +50,8 @@ export default function App() {
                         <div className='welcome-wrapper'>
 
                         <div className="welcome-message">
-                            ברוך הבא לעומר, כיף לראות אותך כאן!
-                            <p className='welcome-message_secondary-headline'>העוזר החדש שלכם למציאת רופאיםף מטפלים, מרפאות בתי מרקחת ורפואה דחופה</p>
+                            {WELCOME_MSG}
+                            <p className='welcome-message_secondary-headline'>{WELCOME_SUB_MSG}</p>
                         </div>
                         <div>
                         <img src='static/clalit.png' className='clalit-logo' alt='Clalit'/>
@@ -73,7 +74,7 @@ export default function App() {
                 </div>
                 {serverCrashed && (
                     <div className="server-error-banner">
-                        ⚠️ השרת לא זמין כרגע. נסה שוב מאוחר יותר.
+                        {SERVER_UNAVAILABLE_ERR}
                     </div>
                 )}
                 <div className="chat-input-box">
@@ -82,7 +83,7 @@ export default function App() {
                     <TextField
                         className='input-field'
                         fullWidth
-                        placeholder="מה תרצו לדעת?"
+                        placeholder={INPUT_PLACEHOLDER}
                         value={query}
                         onChange={(e) => setQuery(e.target.value)}
                         onKeyDown={(e) => {
